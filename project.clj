@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [bouncycastle/bcprov-jdk16 "140"]
                  [org.bouncycastle/bcpg-jdk16 "1.46"]
-                 [clj-time "0.4.2"]])
+                 [clj-time "0.4.2"]
+                 [enlive "1.0.0"]])

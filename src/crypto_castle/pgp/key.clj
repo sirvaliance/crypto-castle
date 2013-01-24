@@ -9,7 +9,8 @@
                               PGPPublicKey
                               PGPPublicKeyRing
                               PGPPublicKeyRingCollection))
-  (:use [clj-time.coerce :only [from-date]]))
+  (:use [clj-time.coerce :only [from-date]]
+        [clj-time.core :only [year month day hour minute]]))
 
 (defn key-get-id
   ""
@@ -54,8 +55,14 @@
 (defn key-get-creation-time
   ""
   [pubkey]
-  (from-date
-   (.getCreationTime pubkey)))
+  (let [d (from-date 
+           (.getCreationTime pubkey))]
+    (hash-map
+      :year (year d)
+      :month (month d)
+      :day (day d)
+      :hour (hour d)
+      :minute (minute d))))
 
 (defn get-user-ids
   ""
@@ -63,7 +70,7 @@
   (.getUserIDs pubkey))
 
 (defn key-get-user-id
-  "Return strings of user ids with a key"
+ "Return strings of user ids with a key"
   [pubkey]
    (iterator-seq (get-user-ids pubkey)))
 
@@ -74,5 +81,7 @@
     :user-ids (key-get-user-id pubkey)
     :fingerprint (key-get-fingerprint pubkey)
     :id (key-get-id pubkey)
-    :algorithm (key-get-algorithm-string pubkey)))
+    :algorithm (key-get-algorithm-string pubkey)
+    :bit-strength (key-get-bit-strength pubkey)
+    :creation-time (key-get-creation-time pubkey)))
 
