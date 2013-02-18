@@ -1,8 +1,12 @@
 ;; This search.clj file should do the following:
 ;;
-;; - Contain a list of all of the main keyservers
-;; - Search and return the keyring for the users for the query
-;; - Leave parsing of the keyring for keyring.clj (currently does not)
+;; x Contain a list of all of the main keyservers
+;; x Search and return the keyring for the users for the query
+;; x Leave parsing of the keyring for keyring.clj (currently does not)
+;; - Manage searches with multiple returned keys/ids
+;; - Find more keyservers to add
+;; - SSL/TLS Support
+;; - Implement a server chooser
 
 
 
@@ -16,6 +20,11 @@
   (:use [net.cgrand.enlive-html])
   (:require [crypto-castle.pgp.key :as pgpkey]))
 
+
+(def keyservers ["http://pgp.mit.edu:11371/"
+                 "http://pool.sks-keyservers.net:11371/"
+                 "http://zimmermann.mayfirst.org/"])
+
 (def keyserver-key-url "http://pgp.mit.edu:11371/pks/lookup?")
 
 (defn build-search-url
@@ -27,7 +36,7 @@
 
 
 (defn retrieve-key
-  "Returns a string"
+  "Returns a string of pgp key data from search"
   [search-term]
   ;; Should url format the string and append to search
   (-> 
@@ -40,18 +49,6 @@
     first))
 
 
-(defn parse-key
-  "Returns a PGP Key from a string of a pgp object"
-  [key-string]
-  (iterator-seq
-    (.getPublicKeys
-      (.nextObject
-        (new PGPObjectFactory
-             (PGPUtil/getDecoderStream
-               (new ByteArrayInputStream
-                    (.getBytes key-string))))))))
-
-
 (defn parse-to-keyring
   [key-string]
   (.nextObject
@@ -61,5 +58,8 @@
                 (.getBytes key-string))))))
 
 
-
-
+(defn find-pubring
+  "Returns a PGPPublicKeyRing based on keysearch"
+  [search-term]
+  (parse-to-keyring
+    (retrieve-key search-term)))

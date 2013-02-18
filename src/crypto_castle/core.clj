@@ -1,3 +1,9 @@
+;; This file should to the following:
+;;
+;; * Link all of the supporting code to provide the most common functions
+;;
+;;
+
 (ns crypto-castle.core
    (:import
     (java.security Security)
