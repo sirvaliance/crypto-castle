@@ -16,3 +16,9 @@
     (is (= 1 (count (get-public-keys test-keyring))))))
 
 
+
+(deftest key-search
+         (testing "Search pgp.mit.edu for key, parse it, output data"
+
+
+;; (parse-key (retrieve-key "Sir Valiance"))

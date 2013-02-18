@@ -1,3 +1,13 @@
+;; This file is for managing your public key ring
+;;
+;; Functions this file should contain:
+;;
+;; - Parsing and returning a PGP keyring from a pubring.gpg file
+;; - Adding/Removing  a users public keyring to the main keyring collection
+;; - Loading/Saving Public keyring files to disk
+;; - Return a clojure data structure of keys for easy reading of key info with key.clj
+;; - Return a set of public keys from a keyring
+
 (ns crypto-castle.pgp.keyring
   (:import
     (java.security Security)
@@ -32,3 +42,9 @@
   "Returns an iterator of public keys"
   [pubring-file]
   (map cast-pubkey (get-keyrings pubring-file)))
+
+(defn insert-public-key
+  "Takes a keyring (that needs inserting) and a public key and
+  returns the new keyring"
+  [keyring pub-key]
+  (PGPPublicKeyRing/insertPublicKey keyring pub-key))

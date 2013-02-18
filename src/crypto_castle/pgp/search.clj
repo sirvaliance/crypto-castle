@@ -1,3 +1,11 @@
+;; This search.clj file should do the following:
+;;
+;; - Contain a list of all of the main keyservers
+;; - Search and return the keyring for the users for the query
+;; - Leave parsing of the keyring for keyring.clj (currently does not)
+
+
+
 (ns crypto-castle.pgp.search
   (:import 
     (java.net URL)
@@ -5,7 +13,8 @@
     (java.io ByteArrayInputStream)
     (org.bouncycastle.openpgp PGPUtil
                               PGPObjectFactory))
-  (:use [net.cgrand.enlive-html]))
+  (:use [net.cgrand.enlive-html])
+  (:require [crypto-castle.pgp.key :as pgpkey]))
 
 (def keyserver-key-url "http://pgp.mit.edu:11371/pks/lookup?")
 
@@ -41,3 +50,16 @@
              (PGPUtil/getDecoderStream
                (new ByteArrayInputStream
                     (.getBytes key-string))))))))
+
+
+(defn parse-to-keyring
+  [key-string]
+  (.nextObject
+    (new PGPObjectFactory
+         (PGPUtil/getDecoderStream
+           (new ByteArrayInputStream
+                (.getBytes key-string))))))
+
+
+
+

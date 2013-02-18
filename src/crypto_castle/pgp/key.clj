@@ -1,3 +1,9 @@
+;; The key.clj file should do the following
+;;
+;; - Return all data related to a pgp key
+;; - Return a clojure data structure for easily working with key data
+;; - A pretty printer of key data
+
 (ns crypto-castle.pgp.key
    (:import
     (java.security Security)
