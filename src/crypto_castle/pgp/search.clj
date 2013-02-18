@@ -40,7 +40,7 @@
   [search-term]
   ;; Should url format the string and append to search
   (-> 
-    (str (build-search-url keyserver-key-url search-term) "&op=get")
+    (str (build-search-url keyserver-key-url search-term) "&op=get&exact=on")
     URL. 
     html-resource 
     (select [:body :pre])
